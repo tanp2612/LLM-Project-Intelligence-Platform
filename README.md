@@ -46,35 +46,34 @@ Key Capabilities
 
 📌 Source-grounded responses with citations
 
-🏗️ System Architecture
+## 🏗️ System Architecture
 
-The platform follows a modular 8-layer architecture designed for separation of concerns, maintainability, and extensibility.
+The platform follows a modular 8-layer architecture designed for separation of concerns, maintainability, scalability, and extensibility.
 
-┌───────────────────────────────────────────────┐
-│                    UI Layer                   │
-│        User Query / Response Interface        │
-├───────────────────────────────────────────────┤
-│              Orchestration Layer              │
-│             LangGraph Workflow                │
-├───────────────────────────────────────────────┤
-│                  Agent Layer                  │
-│ Knowledge │ Risk │ Summary │ Health Agents   │
-├───────────────────────────────────────────────┤
-│                   Tool Layer                  │
-│       Retrieval / Processing Utilities        │
-├───────────────────────────────────────────────┤
-│                Retrieval Layer                │
-│ Metadata Filter → Embedding Search → Top-K   │
-├───────────────────────────────────────────────┤
-│              Knowledge Base Layer             │
-│        Documents → Chunks → FAISS Index       │
-├───────────────────────────────────────────────┤
-│                    LLM Layer                  │
-│           Llama 3.1 via Groq API              │
-├───────────────────────────────────────────────┤
-│                 Guardrails Layer              │
-│       Context Validation / Grounding          │
-└───────────────────────────────────────────────┘
+    UI["🖥️ UI Layer<br/>User Query / Response Interface"]
+
+    ORCH["⚙️ Orchestration Layer<br/>LangGraph Workflow"]
+
+    AGENTS["🤖 Agent Layer<br/>Knowledge • Risk • Summary • Health"]
+
+    TOOLS["🛠️ Tool Layer<br/>Retrieval / Processing Utilities"]
+
+    RETRIEVAL["🔎 Retrieval Layer<br/>Metadata Filtering → Embedding Search → Top-K Retrieval"]
+
+    KB["📚 Knowledge Base Layer<br/>Documents → Chunks → FAISS Index"]
+
+    LLM["🧠 LLM Layer<br/>Llama 3.1 via Groq API"]
+
+    GUARD["🛡️ Guardrails Layer<br/>Context Validation / Grounding"]
+
+    UI --> ORCH
+    ORCH --> AGENTS
+    AGENTS --> TOOLS
+    TOOLS --> RETRIEVAL
+    RETRIEVAL --> KB
+    KB --> LLM
+    LLM --> GUARD
+    GUARD --> UI
 
 🤖 Multi-Agent Workflow
 
@@ -101,34 +100,6 @@ Produces concise summaries of relevant project information
 Analyzes project health/status information using retrieved evidence
 
 High-Level Flow
-
-User Query
-    │
-    ▼
-Query Understanding
-    │
-    ▼
-LangGraph Orchestration
-    │
-    ├──────────────┬──────────────┬──────────────┐
-    ▼              ▼              ▼              ▼
-Knowledge       Risk           Summary        Health
- Agent          Agent           Agent          Agent
-    │              │              │              │
-    └──────────────┴──────────────┴──────────────┘
-                       │
-                       ▼
-              Retrieval Pipeline
-                       │
-                       ▼
-                Context Validation
-                       │
-                       ▼
-             Llama 3.1 Generation
-                       │
-                       ▼
-              Grounded Response
-                + Citations
 
 🔎 Retrieval-Augmented Generation Pipeline
 
